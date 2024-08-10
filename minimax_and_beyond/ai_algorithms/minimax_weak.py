@@ -1,17 +1,13 @@
-from tictactoe import TicTacToe
+from ai_algorithms.ai import AI
+from game import Game
 
-class DumbAi():
-    def move(self, game: TicTacToe) -> int:
-        position = game.available_positions()[0]
-        return position
-    
-class MinimaxAi():
-    def move(self, game: TicTacToe) -> int:
+class MinimaxWithoutEvalFuncOrDepthAi(AI):
+    def move(self, game: Game) -> int:
         position = self._minimax(game, game.current_player)
         return position
         
     
-    def _minimax(self, game, max_player):
+    def _minimax(self, game: Game, max_player):
         best_score = float("-inf")
         for i in game.available_positions():
             game.play(i, real = False)
@@ -26,11 +22,11 @@ class MinimaxAi():
         return position
 
 
-    def _inner_minimax(self, game: TicTacToe, max_player: str, maximizing = False) -> int:
-        if game.there_is_winner():
-            game.change_player() # Tricky af
+    def _inner_minimax(self, game: Game, max_player: str, maximizing = False) -> int:
+        if game.winner():
+            game.next_turn() # Tricky af
             winner = game.current_player 
-            game.change_player() # Tricky af
+            game.next_turn() # Tricky af
             return 10 if (winner == max_player) else -10
         elif game.is_full():
             return 0

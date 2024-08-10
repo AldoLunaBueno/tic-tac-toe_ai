@@ -1,36 +1,43 @@
+from game import Game
 from typing import List, Union
 
-class TicTacToe:
+class TicTacToe(Game):
     def __init__(self):
         self.board = [" " for i in range(9)]
         self.current_player = "X"
         self.position_stack = list()
+        self.winner_lines = [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]
         
     def available_positions(self) -> List:
         positions = [i for i, c in enumerate(self.board) if c == " "]
         return positions
 
-    def change_player(self):
+    def next_turn(self):
         # Change turn
         if self.current_player == "X":
             self.current_player = "O"
         else:
             self.current_player = "X"
 
-    def display(self):
+    def display(self, kb_numbers = False):
         """
         Displays the board game.
         """
+        if kb_numbers:
+            rows = [[3*i+1, 3*i+2, 3*i+3] for i in range(2,-1,-1)]
+            for row in rows:
+                print("|" + "|".join(list(map(str, row))) + "|")
+            return
+
         rows = [self.board[3*i:3*(i+1)] for i in range(3)]
         for row in rows:
             print("|" + "|".join(row) + "|")
     
-    def there_is_winner(self):
-        winner_lines = [(0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6)]
-        for win_line in winner_lines:
+    def winner(self):        
+        for win_line in self.winner_lines:
             if self.board[win_line[0]] == self.board[win_line[1]] == self.board[win_line[2]] != " ":                
-                return True
-        return False
+                return self.board[win_line[0]]
+        return None
     
     def is_full(self):
         return " " not in self.board
@@ -39,7 +46,7 @@ class TicTacToe:
         if not real:
             self.board[position] = self.current_player
             self.position_stack.append(position)
-            self.change_player()
+            self.next_turn()
             return None
             
         # Validation
@@ -56,16 +63,14 @@ class TicTacToe:
         self.position_stack.append(position)
 
         # Check end game
-        if self.there_is_winner():
-            self.display()
+        if self.winner():
             print(f"Winner: {self.current_player}")
             return True
         elif self.is_full():
-            self.display()
             print("It's a draw.")
             return True   
         
-        self.change_player()
+        self.next_turn()
         return False
     
     def undo(self):
@@ -75,4 +80,4 @@ class TicTacToe:
         
         last_position = self.position_stack.pop()
         self.board[last_position] = " "
-        self.change_player()
+        self.next_turn()
