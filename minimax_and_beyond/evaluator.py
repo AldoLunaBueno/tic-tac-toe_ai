@@ -20,15 +20,16 @@ class TicTacToeStandardEvaluator(Evaluator):
         Evaluates statically a TicTacToe game state
         """
 
-        winner = game.winner()
+        winner = game.get_winner()
         if winner != None:
             return float("inf") if (max_player == winner) else float("-inf")
         elif game.is_full():
             return 0
 
         eval = 0
-        for line in game.winner_lines:
-            x_count = sum(game.board[p] == "X" for p in line)
-            o_count = sum(game.board[p] == "O" for p in line)
+        board = game.get_board()
+        for line in game.get_winner_lines():
+            x_count = sum(board[p] == "X" for p in line)
+            o_count = sum(board[p] == "O" for p in line)
             eval += self.heuristic_array[x_count][o_count]
         return eval if max_player == "X" else -eval

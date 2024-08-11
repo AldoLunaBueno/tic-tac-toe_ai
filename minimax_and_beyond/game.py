@@ -2,10 +2,8 @@ from abc import ABC, abstractmethod
 
 class Game(ABC):
 
-    current_player: str
-
     @abstractmethod
-    def available_positions(self):
+    def available_moves(self):
         pass
 
     @abstractmethod
@@ -29,5 +27,21 @@ class Game(ABC):
         pass
 
     @abstractmethod
-    def winner(self):
+    def get_board(self):
+        pass
+
+    @abstractmethod
+    def get_winner(self):
+        pass
+
+    @abstractmethod
+    def get_current_player(self):
+        pass
+
+    @abstractmethod
+    def set_current_player(self):
+        pass
+
+    @abstractmethod
+    def set_board(self):
         pass

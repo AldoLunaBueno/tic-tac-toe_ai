@@ -39,17 +39,18 @@ def menu():
 
 def ai_turn():
     ai_position = ai.move(game)    
-    print(f"AI ({game.current_player}) moves to {trans_pos2kb(ai_position)}: ")               
+    print(f"AI ({game.get_current_player()}) moves to {trans_pos2kb(ai_position)}: ")               
     if game.play(ai_position):
         game.display()
         return True
     game.display()
+    print(game.get_board())
     print("\n")
     return False
 
 def human_turn():
     while True:
-        player = game.current_player
+        player = game.get_current_player()
         human_position = int(input(f"Player {player} moves to [1-9]: "))
         result = game.play(trans_kb2pos(human_position))
         game.display()

@@ -6,14 +6,14 @@ class MinimaxAi(AI, Evaluator):
     def __init__(self, evaluator: Evaluator) -> None:
         self.evaluator = evaluator
     def move(self, game: Game) -> int:
-        position = self._minimax(game, game.current_player, depth = 4)
+        position = self._minimax(game, game.get_current_player(), depth = 2)
         return position
         
     
     def _minimax(self, game: Game, max_player, depth = 4):
         best_score = float("-inf")
         position = None
-        for i in game.available_positions():
+        for i in game.available_moves():
             game.play(i, real = False)
             score = self._inner_minimax(game, max_player, depth = depth - 1)
             game.undo()
@@ -28,7 +28,7 @@ class MinimaxAi(AI, Evaluator):
 
     def _inner_minimax(self, game: Game, max_player: str, maximizing = False, depth = 2) -> int:
 
-        winner = game.winner()
+        winner = game.get_winner()
         if winner != None:
             return float("inf") if (winner == max_player) else float("-inf")
         elif game.is_full():
@@ -38,7 +38,7 @@ class MinimaxAi(AI, Evaluator):
         
         if not maximizing:
             best_score = float("inf")
-            for i in game.available_positions():
+            for i in game.available_moves():
                 game.play(i, real = False)
                 score = self._inner_minimax(game, max_player, maximizing = True, depth = depth-1)
                 game.undo()
@@ -46,7 +46,7 @@ class MinimaxAi(AI, Evaluator):
             return best_score
         elif maximizing:
             best_score = float("-inf")
-            for i in game.available_positions():
+            for i in game.available_moves():
                 game.play(i, real = False)
                 score = self._inner_minimax(game, max_player, maximizing = False, depth = depth-1)
                 game.undo()
