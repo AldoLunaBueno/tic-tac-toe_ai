@@ -16,38 +16,41 @@ class AlphaBetaPruning(AI):
                      depth: int = 3, maximizing = True) -> Tuple[int, int]:
         winner = game.get_winner()
         if winner != None:
-            return None, float("inf") if (winner == max_player) else float("-inf")
+            return None, (float("inf") if (winner == max_player) 
+                          else float("-inf"))
         elif game.is_full():
             return None, 0
         elif depth == 0:
             return None, self.evaluator.evaluate(game, max_player)
         
         best_move = None
-        if maximizing:          
+        if maximizing:
+            best_score = float("-inf")
             for move in game.available_moves():
                 game.play(move, real = False) 
-                _, score = self.__ab_pruning(game, max_player, alpha, beta, depth-1, maximizing = False)
+                _, score = self.__ab_pruning(game, max_player, alpha, beta, 
+                                             depth-1, maximizing = False)
                 game.undo()
-                if score < alpha:
+                if score <= best_score:
                     continue
-                alpha = score
-                best_move = move
-                if alpha >= beta: # main condition to PRUNING
-                    break
-                if alpha == float("inf"): # max_player win the game, so...
-                    break
-            return best_move, alpha
+                best_score = score
+                best_move = move             
+                alpha = max(alpha, best_score)
+                if alpha >= beta: # PRUNING condition
+                    break                
+            return best_move, best_score
         else:
+            best_score = float("inf")
             for move in game.available_moves():
                 game.play(move, real = False) 
-                _, score = self.__ab_pruning(game, max_player, alpha, beta, depth-1, maximizing = True)
-                game.undo()      
-                if score > beta:
+                _, score = self.__ab_pruning(game, max_player, alpha, beta, 
+                                             depth-1, maximizing = True)
+                game.undo()
+                if score >= best_score:
                     continue
-                beta = score
+                best_score = score
                 best_move = move
-                if alpha >= beta: # main condition to PRUNING
+                beta = min(beta, best_score)
+                if alpha >= beta: # PRUNING condition
                     break
-                if beta == float("-inf"): # max_player lose the game, so...
-                    break
-            return best_move, beta
+            return best_move, best_score
