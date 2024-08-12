@@ -2,7 +2,7 @@ from ai_algorithms.ai import AI
 from game import Game
 
 class MinimaxWithoutEvalFuncOrDepthAi(AI):
-    def move(self, game: Game) -> int:
+    def make_move(self, game: Game) -> int:
         position = self._minimax(game, game.get_current_player())
         return position
         

@@ -19,7 +19,7 @@ class Game(ABC):
         pass
 
     @abstractmethod
-    def play(self, position):
+    def play(self, move, real = True):
         pass
     
     @abstractmethod

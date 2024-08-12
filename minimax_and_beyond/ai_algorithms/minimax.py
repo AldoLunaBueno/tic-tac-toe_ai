@@ -2,10 +2,10 @@ from ai_algorithms.ai import AI
 from game import Game
 from evaluator import Evaluator
 
-class MinimaxAi(AI, Evaluator):
+class MinimaxAi(AI):
     def __init__(self, evaluator: Evaluator) -> None:
         self.evaluator = evaluator
-    def move(self, game: Game) -> int:
+    def make_move(self, game: Game) -> int:
         position = self._minimax(game, game.get_current_player(), depth = 2)
         return position
         

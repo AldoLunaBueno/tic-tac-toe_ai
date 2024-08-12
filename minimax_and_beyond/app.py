@@ -1,10 +1,13 @@
 from tictactoe import TicTacToe
 from ai_algorithms.minimax import MinimaxAi
+from ai_algorithms.alpha_beta_pruning import AlphaBetaPruning
 from evaluator import TicTacToeStandardEvaluator
 
 game = TicTacToe()
 evaluator = TicTacToeStandardEvaluator()
-ai = MinimaxAi(evaluator)
+# ai = MinimaxAi(evaluator)
+ai = AlphaBetaPruning(evaluator)
+
 
 # keyboard to position
 kb2pos = {7:0, 8:1, 9:2,
@@ -38,7 +41,7 @@ def menu():
     return input("\nX moves first\nO moves next\nChoose your character (X/O): ")
 
 def ai_turn():
-    ai_position = ai.move(game)    
+    ai_position = ai.make_move(game)    
     print(f"AI ({game.get_current_player()}) moves to {trans_pos2kb(ai_position)}: ")               
     if game.play(ai_position):
         game.display()

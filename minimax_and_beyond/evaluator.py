@@ -15,7 +15,7 @@ class TicTacToeStandardEvaluator(Evaluator):
         self.heuristic_array = [[0, -1, -10],
                                 [1, 0, 0],
                                 [10, 0, 0]]
-    def evaluate(self, game: TicTacToe, max_player) -> int:
+    def evaluate(self, game: TicTacToe, max_player: str) -> int:
         """
         Evaluates statically a TicTacToe game state
         """
